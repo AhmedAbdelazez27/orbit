@@ -1,4 +1,3 @@
-
 // Global variables
 let scene, camera, renderer, controls;
 let satelliteDatabase = {};
@@ -158,13 +157,19 @@ function updateObjects() {
         }
 
         satData.mesh.position.copy(interpolatedPos);
+        if (String(satData.name) === satelliteSelect.value) {
+            // console.log("✅ Updating UI for:", satData.name);
+            updateSatelliteInfoUI(satData);
+        }
     });
 
-if (earthMesh) {
-    const realEarthRotationSpeed = (2 * Math.PI) / 86400; // rad/sec
-    const deltaTime = 1 / 60; // Assuming ~60fps
-    earthMesh.rotation.y += realEarthRotationSpeed * deltaTime;
-}
+    if (earthMesh) {
+        const realEarthRotationSpeed = (2 * Math.PI) / 86400; // rad/sec
+        const deltaTime = 1 / 60; // Assuming ~60fps
+        earthMesh.rotation.y += realEarthRotationSpeed * deltaTime;
+    }
+
+
 }
 
 function animate() {
@@ -185,7 +190,6 @@ function getRandomPanelColor() {
 function getSizeByName(name) {
     return 10;
 }
-
 async function createEarth() {
     const textureLoader = new THREE.TextureLoader();
     const textureUrl = 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg';
@@ -258,64 +262,121 @@ satelliteSearch.addEventListener('input', () => {
     });
 });
 
+// satelliteSelect.addEventListener('change', () => {
+//     const selectedId = satelliteSelect.value;
+//     const satData = satelliteDatabase[selectedId];
+//     if (satData && satData.mesh) {
+//         controls.target.copy(satData.mesh.position);
+//         camera.position.copy(satData.mesh.position.clone().add(new THREE.Vector3(500, 300, 500)));
+//         showLabelForSatellite(satData);
+//     }
+// });
 satelliteSelect.addEventListener('change', () => {
     const selectedId = satelliteSelect.value;
     const satData = satelliteDatabase[selectedId];
+
     if (satData && satData.mesh) {
+        // 1. Focus camera and controls
         controls.target.copy(satData.mesh.position);
         camera.position.copy(satData.mesh.position.clone().add(new THREE.Vector3(500, 300, 500)));
+
+        // 2. Show satellite label
         showLabelForSatellite(satData);
+
+        // 3. Show live info for that satellite
+        updateSatelliteInfoUI(satData);
     }
 });
+function getClosestFrame(frames, now) {
+    let closest = null;
+    let minDiff = Infinity;
+
+    for (const f of frames) {
+        const fTime = new Date(f.timestamp.$date).getTime();
+        const diff = Math.abs(fTime - now.getTime());
+        if (diff < minDiff) {
+            minDiff = diff;
+            closest = f;
+        }
+    }
+
+    return closest;
+}
+
+function updateSatelliteInfoUI(satData) {
+    if (!satData || !satData.frames || satData.frames.length === 0) return;
+
+    const now = getCurrentDataTime();
+
+    // أقرب نقطة بالزمن الحالي
+    const frame = getClosestFrame(satData.frames, now);
+    console.log(frame);
+    console.log(satData);
+
+
+if (frame) {
+  document.getElementById("info-name").textContent = satData.name;
+  document.getElementById("info-alt").textContent = frame.geo?.altitude?.toFixed(2) || "--";
+  document.getElementById("info-lat").textContent = frame.geo?.latitude?.toFixed(4) || "--";
+  document.getElementById("info-long").textContent = frame.geo?.longitude?.toFixed(4) || "--";
+  document.getElementById("info-time").textContent = new Date(frame.timestamp.$date).toLocaleString();
+
+  const altitudes = satData.frames.map(f => f.geo?.altitude || 0);
+  document.getElementById("info-apogee").textContent = Math.max(...altitudes).toFixed(2);
+  document.getElementById("info-perigee").textContent = Math.min(...altitudes).toFixed(2);
+}
+
+}
+
 
 function showLabelForSatellite(satData) {
-  if (!satData || !satData.mesh) return;
+    if (!satData || !satData.mesh) return;
 
-  if (satelliteLabel) {
-    scene.remove(satelliteLabel);
-    satelliteLabel = null;
-  }
+    if (satelliteLabel) {
+        scene.remove(satelliteLabel);
+        satelliteLabel = null;
+    }
 
-  const spriteMaterial = new THREE.SpriteMaterial({
-    map: createTextTexture(`Satellite ${satData.name}`),
-    transparent: true
-  });
+    const spriteMaterial = new THREE.SpriteMaterial({
+        map: createTextTexture(`Satellite ${satData.name}`),
+        transparent: true
+    });
 
-  satelliteLabel = new THREE.Sprite(spriteMaterial);
-  satelliteLabel.scale.set(500, 250, 1); // حجم النص
+    satelliteLabel = new THREE.Sprite(spriteMaterial);
+    satelliteLabel.scale.set(500, 250, 1); // حجم النص
 
-  satData.mesh.add(satelliteLabel);
-  satelliteLabel.position.set(0, 50, 0); // فوق القمر شوية
+    satData.mesh.add(satelliteLabel);
+    satelliteLabel.position.set(0, 50, 0); // فوق القمر شوية
 }
 
 function createTextTexture(text) {
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = 512;
-  canvas.height = 256;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 512;
+    canvas.height = 256;
 
-  ctx.fillStyle = 'rgba(0,0,0,0.7)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = '40px Arial';
-  ctx.fillStyle = '#ffffff';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+    ctx.font = '40px Arial';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.encoding = THREE.sRGBEncoding;
-  return texture;
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.encoding = THREE.sRGBEncoding;
+    return texture;
 }
 
 document.getElementById("reset-to-earth").addEventListener("click", () => {
-  if (!earthMesh) return;
+    if (!earthMesh) return;
 
-  const earthPosition = earthMesh.position.clone();
-  controls.target.copy(earthPosition); // خلي المركز على الأرض
+    const earthPosition = earthMesh.position.clone();
+    controls.target.copy(earthPosition); // خلي المركز على الأرض
 
-  const camOffset = new THREE.Vector3(0, 0, 12000);
-  camera.position.copy(earthPosition.clone().add(camOffset)); // زووم للخلف
+    const camOffset = new THREE.Vector3(0, 0, 12000);
+    camera.position.copy(earthPosition.clone().add(camOffset)); // زووم للخلف
 
-  controls.update();
+    controls.update();
 });
