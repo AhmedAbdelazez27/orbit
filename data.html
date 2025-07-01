@@ -1,0 +1,207 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data & Analytics Dashboard</title>
+  <link rel="stylesheet" href="landing.css" />
+</head>
+<body>
+
+ <main class=".orbit-container">
+    <div class=".orbit-card" style="background-image: url('photo_2025-06-22_22-38-46.jpg')">
+      <div class=".orbit-content">
+        <h2 class=".orbit-title">Short term</h2>
+       
+      </div>
+    </div>
+     <div class=".orbit-card" style="background-image: url('photo_2025-06-22_22-38-46.jpg')">
+      <div class=".orbit-content">
+        <h2 class=".orbit-title">long term</h2>
+        
+      </div>
+    </div>
+   
+    <div class=".orbit-card" style="background-image: url('photo_2025-06-22_22-38-46.jpg')">
+      <div class=".orbit-content">
+        <h2 class=".orbit-title">Explore the Galaxy</h2>
+       
+      </div>
+    </div>
+  </main>
+
+</body>
+</html> -->
+
+
+
+
+
+
+<!-- new about -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data & Analytics Dashboard</title>
+  <style>
+    /* Import Google Fonts for a clean, modern look */
+    @import url('https://fonts.googleapis.com/css?family=Cardo:400i|Rubik:400,700&display=swap');
+
+    /* General Body Styles */
+    body {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      background: #111; /* A slightly softer black for better contrast */
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    /* Grid Container for the Cards */
+    .orbit-container {
+      display: grid;
+      /* This creates a 3-column grid to keep cards side-by-side */
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      padding: 1rem;
+      max-width: 1200px; /* Increased max-width for better layout on larger screens */
+      width: 100%;
+      margin: auto;
+    }
+
+    /* Individual Card Styling */
+    .orbit-card {
+      position: relative;
+      width: 100%;
+      /* By setting aspect-ratio to 1/1, the height will match the width, creating a square. */
+      aspect-ratio: 1 / 1;
+      background-size: cover; /* 'cover' ensures the image fills the card without distortion */
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 15px; /* Softer, more modern rounded corners */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      /* Smooth transitions for hover effects */
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      display: flex;
+      align-items: flex-end; /* Aligns content to the bottom */
+      overflow: hidden; /* Hides content that overflows the card */
+    }
+
+    /* Card Hover Effect: Scale up and enhance shadow */
+    .orbit-card:hover {
+      transform: scale(1.05); /* Slightly more pronounced zoom */
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    }
+    
+    /* Gradient Overlay to make text more readable */
+    .orbit-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      /* Gradient from transparent at the top to dark at the bottom */
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, rgba(0,0,0,0) 60%);
+      z-index: 0; /* Sits below the content */
+      transition: opacity 0.5s ease;
+    }
+
+    /* Card-specific background images using square placeholder service */
+    .orbit-card-1 {
+      background-image: url('https://placehold.co/600x600/000000/FFFFFF?text=Short+Term');
+    }
+
+    .orbit-card-2 {
+      background-image: url('https://placehold.co/600x600/1E293B/FFFFFF?text=Long+Term');
+    }
+
+    .orbit-card-3 {
+      background-image: url('https://placehold.co/600x600/334155/FFFFFF?text=Explore');
+    }
+
+    /* Content block that appears on hover */
+    .orbit-content {
+      position: relative;
+      padding: 2rem;
+      z-index: 1; /* Sits on top of the gradient overlay */
+      width: 100%;
+      box-sizing: border-box; /* Ensures padding is included in the width */
+      text-align: left;
+      /* Initially, the content is mostly hidden, with only the title area visible */
+      transform: translateY(calc(100% - 80px)); 
+      opacity: 1; /* Always visible to allow for transition */
+      /* A nice cubic-bezier for a smooth, elastic slide-in effect */
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    /* Slide content up fully when the card is hovered */
+    .orbit-card:hover .orbit-content {
+      transform: translateY(0);
+    }
+
+    /* Title Styling */
+    .orbit-title {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 0.5rem 0; /* Clean margin definition */
+    }
+    
+    /* Description Styling */
+    .orbit-description {
+        font-family: 'Cardo', serif; /* A classic serif font for contrast */
+        font-style: italic;
+        font-size: 1.1rem;
+        opacity: 0; /* Initially hidden */
+        /* Fade in after the slide animation starts */
+        transition: opacity 0.5s ease 0.3s;
+    }
+
+    /* Fade in the description on card hover */
+    .orbit-card:hover .orbit-description {
+        opacity: 1;
+    }
+    
+    /* Media query for smaller screens to prevent cards from becoming too squished */
+    @media (max-width: 768px) {
+        .orbit-container {
+            grid-template-columns: 1fr; /* Stack cards vertically on smaller screens */
+        }
+        .orbit-title {
+            font-size: 1.5rem; /* Adjust font size for mobile */
+        }
+    }
+
+  </style>
+</head>
+<body>
+
+  <main class="orbit-container">
+    <!-- Card 1 -->
+    <div class="orbit-card orbit-card-1">
+      <div class="orbit-content">
+        <h2 class="orbit-title">Short Term</h2>
+        <p class="orbit-description">Focused goals for the next quarter, driving immediate impact and performance.</p>
+      </div>
+    </div>
+    <div class="orbit-card orbit-card-2">
+      <div class="orbit-content">
+        <h2 class="orbit-title">Long Term</h2>
+         <p class="orbit-description">Strategic vision for future growth, innovation, and market leadership.</p>
+      </div>
+    </div>
+    <div class="orbit-card orbit-card-3">
+      <div class="orbit-content">
+        <h2 class="orbit-title">Explore the Galaxy</h2>
+        <p class="orbit-description">Venture into new possibilities, data frontiers, and untapped potential in agriculture and beyond.</p>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

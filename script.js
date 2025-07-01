@@ -1,3 +1,4 @@
+
 // Global variables
 let scene, camera, renderer, controls;
 let satelliteDatabase = {};
@@ -73,9 +74,11 @@ async function initVisualization() {
 
     await createEarth();
 
-    fetch("nsst2.json")
+fetch('http://nsst.runasp.net/api/TEST_2')
         .then(res => res.json())
         .then(data => {
+            console.log("data ",data);
+            
             if (data.length === 0 || !data[0].positions || data[0].positions.length === 0) {
                 console.warn("No satellite position data found.");
                 return;
@@ -103,7 +106,7 @@ async function initVisualization() {
                 satelliteDatabase[noradId] = satData;
             });
             populateSatelliteList();
-            console.log("✅ Satellites loaded:", Object.keys(satelliteDatabase));
+            // console.log("✅ Satellites loaded:", Object.keys(satelliteDatabase));
         });
 }
 
@@ -310,8 +313,8 @@ function updateSatelliteInfoUI(satData) {
 
     // أقرب نقطة بالزمن الحالي
     const frame = getClosestFrame(satData.frames, now);
-    console.log(frame);
-    console.log(satData);
+    // console.log(frame);
+    // console.log(satData);
 
 
 if (frame) {
