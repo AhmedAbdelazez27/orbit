@@ -1170,21 +1170,19 @@ function initializeOrbitVisualization() {
 // --- End of Mobile Navigation Toggle block ---
 // start on regiter 
 document.getElementById('signup-form').addEventListener('submit', function(event) {
-    event.preventDefault();  // منع إرسال النموذج بشكل تقليدي
-
-    // جمع البيانات من الحقول
+    event.preventDefault(); 
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
 
-    // تحقق من تطابق كلمة المرور مع تأكيد كلمة المرور
+
     if (password !== confirmPassword) {
         alert('Passwords do not match!');
         return;
     }
 
-    // إنشاء جسم الطلب
+
     const requestData = {
         name: name,
         email: email,
@@ -1204,7 +1202,7 @@ document.getElementById('signup-form').addEventListener('submit', function(event
             alert('Registration successful!');
             console.log(data);
             
-            // window.location.href = 'sign-in.html';
+            window.location.href = 'sign-in.html';
         } else {
            
             alert('Registration failed: ' + data);
@@ -1215,3 +1213,5 @@ document.getElementById('signup-form').addEventListener('submit', function(event
         alert('An error occurred. Please try again later.');
     });
 });
+
+// log in 

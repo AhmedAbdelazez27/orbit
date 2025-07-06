@@ -74,7 +74,7 @@ async function initVisualization() {
 
     await createEarth();
 
-fetch('http://nsst.runasp.net/api/TEST_2')
+fetch('http://nsst.runasp.net/api/TEST_3/TEST_3')
         .then(res => res.json())
         .then(data => {
             console.log("data ",data);

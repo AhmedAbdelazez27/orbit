@@ -4,26 +4,28 @@
 
 <head>
 
- <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
- <title>SpaceWatch - Sign In</title>
+    <title>SpaceWatch - Sign In</title>
 
- <link rel="stylesheet" href="landing.css"  >
+    <link rel="stylesheet" href="landing.css">
 
- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300..700&display=swap"
+        rel="stylesheet">
 
 </head>
 
 <body>
 
- <header class="sticky-nav">
-    <nav>
+    <header class="sticky-nav">
+        <nav>
             <div class="logo">
                 <a href="landing.html">SpaceWatch</a>
             </div>
@@ -39,9 +41,9 @@
                 <li><a href="sign-in.html">Sign in</a></li>
             </ul>
         </nav>
-        
 
- <!-- <nav>
+
+        <!-- <nav>
 
 <div class="logo">
 
@@ -73,61 +75,80 @@
 
  </nav> -->
 
- </header>
+    </header>
 
 
- <main class="page-content">
+    <main class="page-content">
 
-<section class="auth-section">
+        <section class="auth-section">
 
- <div class="auth-form-container content-block">
+            <div class="auth-form-container content-block">
 
- <h2>Sign In</h2>
+                <h2>Sign In</h2>
 
- <p class="section-intro">Welcome back! Access your dashboard.</p>
+                <p class="section-intro">Welcome back! Access your dashboard.</p>
 
- <form id="signin-form" action="#" method="POST">
+                <form id="signin-form">
+                    <div class="form-group">
+                        <label for="email">Name:</label>
+                        <input type="text" id="email" name="email" required>
+                    </div>
 
- <div class="form-group">
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
 
- <label for="email">Email:</label>
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                </form>
 
- <input type="email" id="email" name="email" required>
+                <p class="switch-form-link">
+                    Don't have an account? <a href="sign-up.html">Sign Up</a>
 
- </div>
+                </p>
 
-<div class="form-group">
+            </div>
 
- <label for="password">Password:</label>
+        </section>
 
-<input type="password" id="password" name="password" required>
-
-</div>
-
- <button type="submit" class="btn btn-primary">Sign In</button>
-
- </form>
-
-<p class="switch-form-link">
-Don't have an account? <a href="sign-up.html">Sign Up</a>
-
-</p>
-
- </div>
-
- </section>
-
- </main>
+    </main>
 
 
- <footer>
+    <footer>
 
- <p>&copy; 2025 SpaceWatch. All rights reserved.</p>
+        <p>&copy; 2025 SpaceWatch. All rights reserved.</p>
 
-</footer>
+    </footer>
 
 
- <script src="scriptone.js"></script>
+    <script>
+         document.getElementById('signin-form').addEventListener('submit', async function (event) {
+                        event.preventDefault();
+
+                        const email = document.getElementById('email').value;
+                        const password = document.getElementById('password').value;
+
+                        const url = `http://nsst.runasp.net/api/User_Management_System/login?name=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+
+                        try {
+                            const response = await fetch(url, {
+                                method: 'POST'
+                            });
+
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+
+                            const data = await response.json();
+                            console.log('Login Successful:', data);
+                            alert('Login Successful!');
+                             window.location.href = 'landing.html';
+                        } catch (error) {
+                            console.error('Error during login:', error);
+                            alert('Login Failed!');
+                        }
+                    });
+    </script>
 
 </body>
 
